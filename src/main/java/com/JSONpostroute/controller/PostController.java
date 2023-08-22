@@ -29,13 +29,7 @@ public class PostController {
         List<RequestJSON> requestJson = new ArrayList<>();
 
         try {
-
             requestJson = Arrays.asList(mapper.readValue(reqStringArray[1], RequestJSON[].class));
-
-            System.out.println(requestJson.get(0).getProduct());
-            System.out.println(requestJson.get(1).getProduct());
-            System.out.println(requestJson.get(2).getProduct());
-
         } catch (
                 JsonGenerationException e) {
             e.printStackTrace();
@@ -57,7 +51,9 @@ public class PostController {
             total_order_value += priceAddend;
         }
 
-        ResponseData test = new ResponseData("total orders: " + total_orders + " total price: " + total_order_value);
+        int sum_digits = sumDigits(total_orders);
+
+        ResponseData test = new ResponseData(" sum_digits: " + sum_digits + " total orders: " + total_orders + " total price: " + total_order_value);
         return new ResponseEntity<>(test, HttpStatus.CREATED);
     }
 
@@ -75,5 +71,15 @@ public class PostController {
         public void setResponse(String response) {
             this.response = response;
         }
+    }
+
+    private int sumDigits(int totalOrders){
+        int result = 0;
+        do{
+            int addend = totalOrders % 10;
+            result += addend;
+            totalOrders /= 10;
+        }while(totalOrders%10 > 0);
+        return result;
     }
 }
