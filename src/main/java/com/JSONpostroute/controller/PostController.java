@@ -20,7 +20,7 @@ import java.util.Map;
 @RestController
 public class PostController {
     @PostMapping("/process-orders")
-    public ResponseEntity<ResponseData> processJson(@RequestBody Map<String, Object> payload){
+    public ResponseEntity<JSONObject> processJson(@RequestBody Map<String, Object> payload){
         ObjectMapper mapper = new ObjectMapper();
         JSONObject reqObj = new JSONObject(payload);
         String reqString = reqObj.toString();
@@ -53,24 +53,12 @@ public class PostController {
 
         int sum_digits = sumDigits(total_orders);
 
-        ResponseData test = new ResponseData(" sum_digits: " + sum_digits + " total orders: " + total_orders + " total price: " + total_order_value);
-        return new ResponseEntity<>(test, HttpStatus.CREATED);
-    }
+        JSONObject response = new JSONObject();
+        response.put("sum_digits", sum_digits);
+        response.put("total_orders", total_orders);
+        response.put("total_order_value", total_order_value);
 
-    public static class ResponseData {
-        private String response;
-
-        public ResponseData(String response) {
-            this.response = response;
-        }
-
-        public String getResponse() {
-            return response;
-        }
-
-        public void setResponse(String response) {
-            this.response = response;
-        }
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     private int sumDigits(int totalOrders){
