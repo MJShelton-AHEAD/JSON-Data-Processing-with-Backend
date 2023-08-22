@@ -8,12 +8,6 @@ public class RequestJSON {
     public RequestJSON() {
     }
 
-    public RequestJSON(String product, int quantity, double unit_price) {
-        this.product = product;
-        this.quantity = quantity;
-        this.unit_price = unit_price;
-    }
-
     public String getProduct() {
         return product;
     }
