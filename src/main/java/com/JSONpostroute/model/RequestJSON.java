@@ -5,6 +5,9 @@ public class RequestJSON {
     private int quantity;
     private double unit_price;
 
+    public RequestJSON() {
+    }
+
     public RequestJSON(String product, int quantity, double unit_price) {
         this.product = product;
         this.quantity = quantity;
