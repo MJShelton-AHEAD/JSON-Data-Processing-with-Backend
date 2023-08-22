@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -21,13 +23,15 @@ public class PostController {
         ObjectMapper mapper = new ObjectMapper();
         JSONObject reqObj = new JSONObject(payload);
         String reqString = reqObj.toString();
+        String[] reqStringArray = reqString.split(":",2);
 
         try {
 
-            RequestJSON requestJson = mapper.readValue(reqString, RequestJSON.class);
-            System.out.println(requestJson.getProduct());
-            System.out.println(requestJson.getQuantity());
-            System.out.println(requestJson.getUnit_price());
+            List<RequestJSON> requestJson = Arrays.asList(mapper.readValue(reqStringArray[1], RequestJSON[].class));
+
+            System.out.println(requestJson.get(0).getProduct());
+            System.out.println(requestJson.get(1).getProduct());
+            System.out.println(requestJson.get(2).getProduct());
 
         } catch (
                 JsonGenerationException e) {

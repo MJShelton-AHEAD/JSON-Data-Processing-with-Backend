@@ -1,6 +1,7 @@
 package com.JSONpostroute.model;
 
 public class RequestJSON {
+    private String orders;
     private String product;
     private int quantity;
     private double unit_price;
