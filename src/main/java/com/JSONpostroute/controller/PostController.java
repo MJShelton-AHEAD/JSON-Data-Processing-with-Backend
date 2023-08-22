@@ -28,11 +28,8 @@ public class PostController {
         int total_orders = totalOrders(requestJson);
         double total_order_value = totalOrderValue(requestJson);
         int sum_digits = sumDigits(total_orders);
-
-        JSONObject response = new JSONObject();
-        response.put("sum_digits", sum_digits);
-        response.put("total_orders", total_orders);
-        response.put("total_order_value", total_order_value);
+        
+        JSONObject response = createJson(sum_digits, total_orders, total_order_value);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -68,8 +65,8 @@ public class PostController {
     private int totalOrderValue(List<RequestJSON> list){
         int total_order_value = 0;
         for (int i = 0; i < list.size(); i++) {
-            double priceAddend = (list.get(i).getUnit_price() * list.get(i).getQuantity());
-            total_order_value += priceAddend;
+            double valueAddend = (list.get(i).getUnit_price() * list.get(i).getQuantity());
+            total_order_value += valueAddend;
         }
         return total_order_value;
     }
@@ -82,5 +79,13 @@ public class PostController {
             totalOrders /= 10;
         }while(totalOrders%10 > 0);
         return result;
+    }
+
+    private JSONObject createJson(int sumDigits, int totalOrders, double totalOrderValue){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("sum_digits", sumDigits);
+        jsonObject.put("total_orders", totalOrders);
+        jsonObject.put("total_order_value", totalOrderValue);
+        return jsonObject;
     }
 }
