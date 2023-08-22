@@ -12,20 +12,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class PostController {
     @PostMapping("/process-orders")
     public ResponseEntity<JSONObject> processJson(@RequestBody Map<String, Object> payload){
         //Turn payload into readable string for Java to parse
-        String[] reqObj = new JSONObject(payload).toString().split(":",2);
+        String[] reqStringArray = new JSONObject(payload).toString().split(":",2);
+
+        //Validates that the JSON contains orders
+        if(!reqIsValid(reqStringArray[0])){
+            JSONObject invalidReq = new JSONObject();
+            invalidReq.put("message", "Request unable to be processed");
+            return new ResponseEntity<>(invalidReq, HttpStatus.BAD_REQUEST);
+        };
 
         //Turn the payload string into a list of RequestJSON classes
-        List<RequestJSON> requestJson = makeList(reqObj[1]);
+        List<RequestJSON> requestJson = makeList(reqStringArray[1]);
 
         //Create the data that will be returned
         int total_orders = totalOrders(requestJson);
@@ -57,6 +61,15 @@ public class PostController {
         }
 
         return returnList;
+    }
+
+    //This function checks to see if the first key is "orders"
+    private boolean reqIsValid(String testString){
+        testString.toLowerCase();
+        if(testString.charAt(2) == 'o' && testString.charAt(3) == 'r' && testString.charAt(4) == 'd' && testString.charAt(5) == 'e' && testString.charAt(6) == 'r' && testString.charAt(7) == 's'){
+            return true;
+        }
+        return false;
     }
 
     //This function finds the sum of the quantity in all orders
