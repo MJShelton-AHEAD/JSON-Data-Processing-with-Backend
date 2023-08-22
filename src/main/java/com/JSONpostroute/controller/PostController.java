@@ -1,17 +1,18 @@
 package com.JSONpostroute.controller;
 
-import com.JSONpostroute.model.RequestJSON;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 public class PostController {
     @PostMapping("/process-orders")
-    public ResponseEntity<ResponseData> processJson(@RequestBody RequestJSON requestJSON){
-        ResponseData test = new ResponseData("Test");
+    public ResponseEntity<ResponseData> processJson(@RequestBody Map<String, Object> payload){
+        ResponseData test = new ResponseData("New test");
         return new ResponseEntity<>(test, HttpStatus.CREATED);
     }
 
