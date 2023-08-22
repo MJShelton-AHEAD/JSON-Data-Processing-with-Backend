@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +26,11 @@ public class PostController {
         String reqString = reqObj.toString();
         String[] reqStringArray = reqString.split(":",2);
 
+        List<RequestJSON> requestJson = new ArrayList<>();
+
         try {
 
-            List<RequestJSON> requestJson = Arrays.asList(mapper.readValue(reqStringArray[1], RequestJSON[].class));
+            requestJson = Arrays.asList(mapper.readValue(reqStringArray[1], RequestJSON[].class));
 
             System.out.println(requestJson.get(0).getProduct());
             System.out.println(requestJson.get(1).getProduct());
@@ -44,9 +47,17 @@ public class PostController {
             e.printStackTrace();
         }
 
+        int total_orders = 0;
+        double total_order_value = 0;
 
+        for (int i = 0; i < requestJson.size(); i++) {
+            int orderAddend = requestJson.get(i).getQuantity();
+            total_orders += orderAddend;
+            double priceAddend = (requestJson.get(i).getUnit_price() * requestJson.get(i).getQuantity());
+            total_order_value += priceAddend;
+        }
 
-        ResponseData test = new ResponseData("Test response");
+        ResponseData test = new ResponseData("total orders: " + total_orders + " total price: " + total_order_value);
         return new ResponseEntity<>(test, HttpStatus.CREATED);
     }
 
