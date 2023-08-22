@@ -1,7 +1,7 @@
 package com.JSONpostroute.model;
 
+//That class is used for the JSON to be mapped against in order for the data to be readable in Java
 public class RequestJSON {
-    private String orders;
     private String product;
     private int quantity;
     private double unit_price;

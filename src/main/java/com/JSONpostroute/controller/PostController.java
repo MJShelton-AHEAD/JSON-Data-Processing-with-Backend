@@ -21,19 +21,25 @@ import java.util.Map;
 public class PostController {
     @PostMapping("/process-orders")
     public ResponseEntity<JSONObject> processJson(@RequestBody Map<String, Object> payload){
+        //Turn payload into readable string for Java to parse
         String[] reqObj = new JSONObject(payload).toString().split(":",2);
 
+        //Turn the payload string into a list of RequestJSON classes
         List<RequestJSON> requestJson = makeList(reqObj[1]);
 
+        //Create the data that will be returned
         int total_orders = totalOrders(requestJson);
         double total_order_value = totalOrderValue(requestJson);
         int sum_digits = sumDigits(total_orders);
-        
+
+        //Turn data into a JSON object
         JSONObject response = createJson(sum_digits, total_orders, total_order_value);
 
+        //Return the response with the HTTP status
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    //This function turns the payload string into a list of RequestJSON classes, or throws errors if data isn't given correctly
     private List<RequestJSON> makeList(String data){
         ObjectMapper mapper = new ObjectMapper();
         List<RequestJSON> returnList = new ArrayList<>();
@@ -53,6 +59,7 @@ public class PostController {
         return returnList;
     }
 
+    //This function finds the sum of the quantity in all orders
     private int totalOrders(List<RequestJSON> list){
         int total_orders = 0;
         for (int i = 0; i < list.size(); i++) {
@@ -62,6 +69,7 @@ public class PostController {
         return total_orders;
     }
 
+    //THis function finds the total value of all orders based on the cost of each product
     private int totalOrderValue(List<RequestJSON> list){
         int total_order_value = 0;
         for (int i = 0; i < list.size(); i++) {
@@ -71,6 +79,7 @@ public class PostController {
         return total_order_value;
     }
 
+    //This function adds together the sum of all the digits found in total orders
     private int sumDigits(int totalOrders){
         int result = 0;
         do{
@@ -81,6 +90,7 @@ public class PostController {
         return result;
     }
 
+    //This function creates a JSON object that can be returned to the client
     private JSONObject createJson(int sumDigits, int totalOrders, double totalOrderValue){
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("sum_digits", sumDigits);
