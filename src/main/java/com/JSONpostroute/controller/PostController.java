@@ -21,15 +21,27 @@ import java.util.Map;
 public class PostController {
     @PostMapping("/process-orders")
     public ResponseEntity<JSONObject> processJson(@RequestBody Map<String, Object> payload){
+        String[] reqObj = new JSONObject(payload).toString().split(":",2);
+
+        List<RequestJSON> requestJson = makeList(reqObj[1]);
+
+        int total_orders = totalOrders(requestJson);
+        double total_order_value = totalOrderValue(requestJson);
+        int sum_digits = sumDigits(total_orders);
+
+        JSONObject response = new JSONObject();
+        response.put("sum_digits", sum_digits);
+        response.put("total_orders", total_orders);
+        response.put("total_order_value", total_order_value);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    private List<RequestJSON> makeList(String data){
         ObjectMapper mapper = new ObjectMapper();
-        JSONObject reqObj = new JSONObject(payload);
-        String reqString = reqObj.toString();
-        String[] reqStringArray = reqString.split(":",2);
-
-        List<RequestJSON> requestJson = new ArrayList<>();
-
+        List<RequestJSON> returnList = new ArrayList<>();
         try {
-            requestJson = Arrays.asList(mapper.readValue(reqStringArray[1], RequestJSON[].class));
+            returnList = Arrays.asList(mapper.readValue(data, RequestJSON[].class));
         } catch (
                 JsonGenerationException e) {
             e.printStackTrace();
@@ -41,24 +53,25 @@ public class PostController {
             e.printStackTrace();
         }
 
-        int total_orders = 0;
-        double total_order_value = 0;
+        return returnList;
+    }
 
-        for (int i = 0; i < requestJson.size(); i++) {
-            int orderAddend = requestJson.get(i).getQuantity();
+    private int totalOrders(List<RequestJSON> list){
+        int total_orders = 0;
+        for (int i = 0; i < list.size(); i++) {
+            int orderAddend = list.get(i).getQuantity();
             total_orders += orderAddend;
-            double priceAddend = (requestJson.get(i).getUnit_price() * requestJson.get(i).getQuantity());
+        }
+        return total_orders;
+    }
+
+    private int totalOrderValue(List<RequestJSON> list){
+        int total_order_value = 0;
+        for (int i = 0; i < list.size(); i++) {
+            double priceAddend = (list.get(i).getUnit_price() * list.get(i).getQuantity());
             total_order_value += priceAddend;
         }
-
-        int sum_digits = sumDigits(total_orders);
-
-        JSONObject response = new JSONObject();
-        response.put("sum_digits", sum_digits);
-        response.put("total_orders", total_orders);
-        response.put("total_order_value", total_order_value);
-
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return total_order_value;
     }
 
     private int sumDigits(int totalOrders){
