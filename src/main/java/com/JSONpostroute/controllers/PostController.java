@@ -1,7 +1,7 @@
 package com.JSONpostroute.controllers;
 
 import com.JSONpostroute.models.RequestJSON;
-import com.JSONpostroute.utils.GeneralFunctions;
+import com.JSONpostroute.functions.utils.GeneralFunctions;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
