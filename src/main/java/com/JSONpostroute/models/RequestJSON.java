@@ -1,4 +1,4 @@
-package com.JSONpostroute.model;
+package com.JSONpostroute.models;
 
 public class RequestJSON {
     private String product;
