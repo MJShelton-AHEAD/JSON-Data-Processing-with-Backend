@@ -1,5 +1,6 @@
 package com.JSONpostroute.controllers;
 
+import com.JSONpostroute.functions.orders.OrderFunctions;
 import com.JSONpostroute.models.RequestJSON;
 import com.JSONpostroute.functions.utils.GeneralFunctions;
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -29,7 +30,7 @@ public class PostController {
 
         List<RequestJSON> requestJson = makeList(reqStringArray[1]);
 
-        int total_orders = totalOrders(requestJson);
+        int total_orders = OrderFunctions.totalOrders(requestJson);
         double total_order_value = totalOrderValue(requestJson);
         int sum_digits = GeneralFunctions.sumDigits(total_orders);
 
@@ -63,15 +64,6 @@ public class PostController {
             return true;
         }
         return false;
-    }
-
-    private int totalOrders(List<RequestJSON> list){
-        int total_orders = 0;
-        for (int i = 0; i < list.size(); i++) {
-            int orderAddend = list.get(i).getQuantity();
-            total_orders += orderAddend;
-        }
-        return total_orders;
     }
 
     private int totalOrderValue(List<RequestJSON> list){
