@@ -1,7 +1,7 @@
 package com.JSONpostroute.controllers;
 
 import com.JSONpostroute.models.RequestJSON;
-import com.JSONpostroute.services.SumDigitsService;
+import com.JSONpostroute.utils.SumDigits;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +31,7 @@ public class PostController {
 
         int total_orders = totalOrders(requestJson);
         double total_order_value = totalOrderValue(requestJson);
-        int sum_digits = SumDigitsService.sumDigits(total_orders);
+        int sum_digits = SumDigits.sumDigits(total_orders);
 
         JSONObject response = createJson(sum_digits, total_orders, total_order_value);
 
