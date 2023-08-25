@@ -10,8 +10,7 @@ public class OrderFunctions {
     public static int totalOrders(List<RequestJSON> orderList){
         int total_orders = 0;
         for (int i = 0; i < orderList.size(); i++) {
-            int orderAddend = orderList.get(i).getQuantity();
-            total_orders += orderAddend;
+            total_orders += orderList.get(i).getQuantity();
         }
         return total_orders;
     }
