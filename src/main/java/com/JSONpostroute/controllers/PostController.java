@@ -1,8 +1,8 @@
 package com.JSONpostroute.controllers;
 
 import com.JSONpostroute.functions.orders.OrderFunctions;
-import com.JSONpostroute.models.RequestJSON;
 import com.JSONpostroute.functions.utils.GeneralFunctions;
+import com.JSONpostroute.models.RequestJSON;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class PostController {
@@ -31,7 +34,7 @@ public class PostController {
         List<RequestJSON> requestJson = makeList(reqStringArray[1]);
 
         int total_orders = OrderFunctions.totalOrders(requestJson);
-        double total_order_value = totalOrderValue(requestJson);
+        double total_order_value = OrderFunctions.totalOrderValue(requestJson);
         int sum_digits = GeneralFunctions.sumDigits(total_orders);
 
         JSONObject response = createJson(sum_digits, total_orders, total_order_value);
@@ -66,14 +69,7 @@ public class PostController {
         return false;
     }
 
-    private int totalOrderValue(List<RequestJSON> list){
-        int total_order_value = 0;
-        for (int i = 0; i < list.size(); i++) {
-            double valueAddend = (list.get(i).getUnit_price() * list.get(i).getQuantity());
-            total_order_value += valueAddend;
-        }
-        return total_order_value;
-    }
+
 
     private JSONObject createJson(int sumDigits, int totalOrders, double totalOrderValue){
         JSONObject jsonObject = new JSONObject();
