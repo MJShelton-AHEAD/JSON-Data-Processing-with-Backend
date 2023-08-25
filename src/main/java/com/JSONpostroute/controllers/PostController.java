@@ -3,6 +3,7 @@ package com.JSONpostroute.controllers;
 import com.JSONpostroute.functions.orders.OrderFunctions;
 import com.JSONpostroute.functions.utils.GeneralFunctions;
 import com.JSONpostroute.models.RequestJSON;
+import com.JSONpostroute.validations.ValidationFunctions;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +26,7 @@ public class PostController {
     public ResponseEntity<JSONObject> processJson(@RequestBody Map<String, Object> payload){
         String[] reqStringArray = new JSONObject(payload).toString().split(":",2);
 
-        if(!reqIsValid(reqStringArray[0])){
+        if(!ValidationFunctions.reqHasOrdersValidation(reqStringArray[0])){
             JSONObject invalidReq = new JSONObject();
             invalidReq.put("message", "Request unable to be processed");
             return new ResponseEntity<>(invalidReq, HttpStatus.BAD_REQUEST);
@@ -60,16 +61,6 @@ public class PostController {
 
         return returnList;
     }
-
-    private boolean reqIsValid(String testString){
-        testString.toLowerCase();
-        if(testString.charAt(2) == 'o' && testString.charAt(3) == 'r' && testString.charAt(4) == 'd' && testString.charAt(5) == 'e' && testString.charAt(6) == 'r' && testString.charAt(7) == 's'){
-            return true;
-        }
-        return false;
-    }
-
-
 
     private JSONObject createJson(int sumDigits, int totalOrders, double totalOrderValue){
         JSONObject jsonObject = new JSONObject();
