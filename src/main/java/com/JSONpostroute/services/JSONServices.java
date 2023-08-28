@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONObject;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +17,7 @@ public class JSONServices {
     public static String[] createStringArray(Map<String, Object> payload){
         return new JSONObject(payload).toString().split(":",2);
     }
+
     public static List<RequestJSON> makeList(String data){
         ObjectMapper mapper = new ObjectMapper();
         List<RequestJSON> returnList = new ArrayList<>();
