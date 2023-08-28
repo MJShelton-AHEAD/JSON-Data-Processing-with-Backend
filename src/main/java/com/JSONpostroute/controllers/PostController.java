@@ -20,7 +20,7 @@ import java.util.Map;
 public class PostController {
     @PostMapping("/process-orders")
     public ResponseEntity<JSONObject> processJson(@RequestBody Map<String, Object> payload){
-        String[] reqStringArray = new JSONObject(payload).toString().split(":",2);
+        String[] reqStringArray = JSONServices.createStringArray(payload);
 
         if(!ValidationFunctions.reqHasOrdersValidation(reqStringArray[0])){
             JSONObject invalidReq = new JSONObject();
