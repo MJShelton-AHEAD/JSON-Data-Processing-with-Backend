@@ -1,6 +1,9 @@
 package com.JSONpostroute.services;
 
+import com.JSONpostroute.functions.orders.OrderFunctions;
+import com.JSONpostroute.functions.utils.GeneralFunctions;
 import com.JSONpostroute.models.RequestJSON;
+import com.JSONpostroute.models.ResponseJSON;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,5 +38,13 @@ public class JSONServices {
         }
 
         return returnList;
+    }
+
+    public static ResponseJSON createResponseJsonService(List<RequestJSON> requestJson){
+        int total_orders = OrderFunctions.totalOrders(requestJson);
+        double total_order_value = OrderFunctions.totalOrderValue(requestJson);
+        int sum_digits = GeneralFunctions.sumDigits(total_orders);
+
+        return new ResponseJSON(sum_digits, total_orders, total_order_value);
     }
 }
