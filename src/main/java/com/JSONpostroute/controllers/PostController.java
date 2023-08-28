@@ -1,7 +1,5 @@
 package com.JSONpostroute.controllers;
 
-import com.JSONpostroute.functions.orders.OrderFunctions;
-import com.JSONpostroute.functions.utils.GeneralFunctions;
 import com.JSONpostroute.models.RequestJSON;
 import com.JSONpostroute.models.ResponseJSON;
 import com.JSONpostroute.services.JSONServices;
@@ -30,11 +28,7 @@ public class PostController {
 
         List<RequestJSON> requestJson = JSONServices.makeList(reqStringArray[1]);
 
-        int total_orders = OrderFunctions.totalOrders(requestJson);
-        double total_order_value = OrderFunctions.totalOrderValue(requestJson);
-        int sum_digits = GeneralFunctions.sumDigits(total_orders);
-
-        ResponseJSON responseJSON = new ResponseJSON(sum_digits, total_orders, total_order_value);
+        ResponseJSON responseJSON = JSONServices.createResponseJsonService(requestJson);
 
         return new ResponseEntity<>(responseJSON.createJson(), HttpStatus.CREATED);
     }
