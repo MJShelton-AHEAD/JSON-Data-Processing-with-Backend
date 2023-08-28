@@ -1,9 +1,12 @@
 package com.JSONpostroute.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RequestJSON {
-    private String product;
-    private int quantity;
-    private double unit_price;
+    private String product = "";
+    private int quantity = -1;
+    private double unit_price = -1;
 
     public RequestJSON() {
     }
