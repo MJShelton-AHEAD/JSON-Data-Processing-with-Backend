@@ -4,10 +4,8 @@ import com.JSONpostroute.functions.orders.OrderFunctions;
 import com.JSONpostroute.functions.utils.GeneralFunctions;
 import com.JSONpostroute.models.RequestJSON;
 import com.JSONpostroute.models.ResponseJSON;
+import com.JSONpostroute.services.JSONServices;
 import com.JSONpostroute.validations.ValidationFunctions;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +28,7 @@ public class PostController {
             return new ResponseEntity<>(invalidReq, HttpStatus.BAD_REQUEST);
         };
 
-        List<RequestJSON> requestJson = makeList(reqStringArray[1]);
+        List<RequestJSON> requestJson = JSONServices.makeList(reqStringArray[1]);
 
         int total_orders = OrderFunctions.totalOrders(requestJson);
         double total_order_value = OrderFunctions.totalOrderValue(requestJson);
@@ -42,24 +37,5 @@ public class PostController {
         ResponseJSON responseJSON = new ResponseJSON(sum_digits, total_orders, total_order_value);
 
         return new ResponseEntity<>(responseJSON.createJson(), HttpStatus.CREATED);
-    }
-
-    private List<RequestJSON> makeList(String data){
-        ObjectMapper mapper = new ObjectMapper();
-        List<RequestJSON> returnList = new ArrayList<>();
-        try {
-            returnList = Arrays.asList(mapper.readValue(data, RequestJSON[].class));
-        } catch (
-                JsonGenerationException e) {
-            e.printStackTrace();
-        } catch (
-                JsonMappingException e) {
-            e.printStackTrace();
-        } catch (
-                IOException e) {
-            e.printStackTrace();
-        }
-
-        return returnList;
     }
 }
