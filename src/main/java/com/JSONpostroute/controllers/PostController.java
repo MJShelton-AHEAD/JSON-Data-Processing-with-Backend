@@ -3,6 +3,7 @@ package com.JSONpostroute.controllers;
 import com.JSONpostroute.functions.orders.OrderFunctions;
 import com.JSONpostroute.functions.utils.GeneralFunctions;
 import com.JSONpostroute.models.RequestJSON;
+import com.JSONpostroute.models.ResponseJSON;
 import com.JSONpostroute.validations.ValidationFunctions;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -38,9 +39,9 @@ public class PostController {
         double total_order_value = OrderFunctions.totalOrderValue(requestJson);
         int sum_digits = GeneralFunctions.sumDigits(total_orders);
 
-        JSONObject response = createJson(sum_digits, total_orders, total_order_value);
+        ResponseJSON responseJSON = new ResponseJSON(sum_digits, total_orders, total_order_value);
 
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(responseJSON.createJson(), HttpStatus.CREATED);
     }
 
     private List<RequestJSON> makeList(String data){
@@ -60,13 +61,5 @@ public class PostController {
         }
 
         return returnList;
-    }
-
-    private JSONObject createJson(int sumDigits, int totalOrders, double totalOrderValue){
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("sum_digits", sumDigits);
-        jsonObject.put("total_orders", totalOrders);
-        jsonObject.put("total_order_value", totalOrderValue);
-        return jsonObject;
     }
 }
